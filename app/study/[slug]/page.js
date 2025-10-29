@@ -4,6 +4,10 @@
 import { listMarkdown, loadMarkdown } from "../../../lib/md"; // import markdown helpers
 import { notFound } from "next/navigation"; // helper for 404 rendering
 
+// Ensure this route is fully static for `output: export`
+export const dynamic = "force-static";
+export const dynamicParams = false; // only the slugs returned by generateStaticParams are valid
+
 export async function generateStaticParams() { // enumerate slugs for static export
   const files = listMarkdown("study") // list study .md files
     .filter(f => !/^STUDY_TEMPLATE$/i.test(f.slug)); // exclude template

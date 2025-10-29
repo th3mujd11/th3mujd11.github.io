@@ -4,6 +4,10 @@
 import { listMarkdown, loadMarkdown } from "../../../lib/md"; // utilities to list and load markdown
 import { notFound } from "next/navigation"; // Next helper to render 404 when content missing
 
+// Ensure static generation only for export mode
+export const dynamic = "force-static";
+export const dynamicParams = false; // only paths from generateStaticParams
+
 // Pre-generate all writeup slugs for static export
 export async function generateStaticParams() { // Next.js build-time function
   const files = listMarkdown("writeups") // list writeup .md files
