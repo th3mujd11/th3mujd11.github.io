@@ -4,10 +4,6 @@
 import { listMarkdown, loadMarkdown } from "../../../lib/md"; // utilities to list and load markdown
 import { notFound } from "next/navigation"; // Next helper to render 404 when content missing
 
-// Ensure static generation only for export mode
-export const dynamic = "force-static";
-export const dynamicParams = false; // only paths from generateStaticParams
-
 // Pre-generate all writeup slugs for static export
 export async function generateStaticParams() { // Next.js build-time function
   const files = listMarkdown("writeups") // list writeup .md files
@@ -16,8 +12,8 @@ export async function generateStaticParams() { // Next.js build-time function
 } // end generateStaticParams
 
 // Optionally set page metadata from front matter
-export async function generateMetadata({ params }) { // Next.js metadata from front matter
-  const { slug } = params; // params is a plain object in App Router
+export async function generateMetadata({ params }) { // Next.js metadata function (await params for Next 16 APIs)
+  const { slug } = await params; // unwrap params promise to get slug
   try { // attempt to read meta
     const { meta } = loadMarkdown("writeups", slug); // load markdown meta
     return { title: meta.title || slug }; // use title if present
@@ -26,8 +22,8 @@ export async function generateMetadata({ params }) { // Next.js metadata from fr
   } // end try/catch
 } // end generateMetadata
 
-export default async function WriteupEntry({ params }) { // main page component with slug param
-  const { slug } = params; // read slug directly
+export default async function WriteupEntry({ params }) { // main page component with slug param (await params)
+  const { slug } = await params; // unwrap params promise
   if (!slug) return notFound(); // if slug missing, render 404
   let html = ""; // default html
   let meta = {}; // default meta
