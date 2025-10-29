@@ -1,0 +1,424 @@
+/* import IBM Plex Mono for a pilot/CTF terminal vibe */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap"); /* load font weights used in the UI */
+
+/* CSS custom properties for consistent theming */
+:root { /* root scope for variables */
+  --bg: #0b0e13; /* deep cockpit-night background */
+  --fg: #d7f9ff; /* high-contrast foreground text */
+  --muted: #8aa6ad; /* muted secondary text */
+  --cyan: #00e5ff; /* cyan accent for cyber aesthetic */
+  --magenta: #ff3bd4; /* magenta accent for contrast */
+  --lime: #a3ff12; /* radar-green accent */
+  --card: #0f141b; /* card background */
+  --border: #1d2833; /* card border color */
+  --glow: 0 0 12px rgba(0, 229, 255, 0.35); /* subtle cyan glow */
+}
+
+/* base reset and background styling */
+html, body { /* ensure the background covers viewport */
+  height: 100%; /* fill viewport height */
+}
+
+body { /* global body styles */
+  margin: 0; /* remove default margins */
+  color: var(--fg); /* use foreground text color */
+  font-family: "IBM Plex Mono", monospace; /* pilot/CTF monospace aesthetic */
+  background-color: var(--bg); /* fallback background color */
+  overflow-x: hidden; /* prevent horizontal scroll due to animations */
+  /* create a subtle radar grid background using layered gradients */
+  background-image:
+    radial-gradient(ellipse at center, rgba(163,255,18,0.04) 0%, rgba(11,14,19,0.0) 60%), /* soft center vignette in radar green */
+    linear-gradient(rgba(0,229,255,0.05) 1px, transparent 1px), /* horizontal grid lines */
+    linear-gradient(90deg, rgba(0,229,255,0.05) 1px, transparent 1px); /* vertical grid lines */
+  background-size:
+    100% 100%, /* vignette covers the whole screen */
+    40px 40px, /* spacing for horizontal grid */
+    40px 40px; /* spacing for vertical grid */
+  background-position:
+    center center, /* center the vignette */
+    0 0, /* start grid at top-left */
+    0 0; /* start grid at top-left */
+}
+
+/* faint scanline overlay for CRT/terminal feel */
+body::after { /* overlay pseudo-element */
+  content: ""; /* empty content to render the element */
+  position: fixed; /* fix overlay to viewport */
+  inset: 0; /* stretch to full viewport */
+  pointer-events: none; /* do not block interactions */
+  background:
+    repeating-linear-gradient(
+      to bottom, /* vertical lines */
+      rgba(255,255,255,0.02), /* thin light line */
+      rgba(255,255,255,0.02) 1px, /* line thickness */
+      transparent 2px, /* gap after line */
+      transparent 4px /* spacing for next line */
+    ); /* creates scanline stripes */
+}
+
+/* centered main column layout */
+.main { /* main container */
+  max-width: 900px; /* readable width */
+  margin: 0 auto; /* center horizontally */
+  padding: 3rem 1.25rem 4.5rem 1.25rem; /* breathing room around content + extra bottom for sticky footer */
+}
+
+/* hero section with name and tagline */
+.hero { /* hero wrapper */
+  display: flex; /* layout children horizontally on wide screens */
+  flex-direction: column; /* stack vertically by default */
+  gap: 1rem; /* space between hero elements */
+  align-items: center; /* center contents */
+  text-align: center; /* center text for small screens */
+}
+
+.title { /* main title styling */
+  font-size: 2.25rem; /* large heading size */
+  font-weight: 700; /* strong weight for impact */
+  letter-spacing: 0.5px; /* slight spacing for style */
+  color: var(--fg); /* primary text color */
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.25); /* subtle glow */
+}
+
+.subtitle { /* subheading/tagline */
+  font-size: 1rem; /* normal subtitle size */
+  color: var(--muted); /* use muted color */
+}
+
+.badges { /* status badges row */
+  display: flex; /* row layout */
+  flex-wrap: wrap; /* wrap when too long */
+  gap: 8px; /* space between badges */
+  justify-content: center; /* center the row */
+}
+
+.badge { /* individual status badge */
+  font-size: 0.75rem; /* small badge text */
+  padding: 6px 10px; /* inner spacing */
+  border: 1px dashed var(--border); /* dashed for terminal vibe */
+  border-radius: 999px; /* pill shape */
+  color: var(--cyan); /* cyan accent text */
+  background: rgba(0,229,255,0.08); /* translucent cyan background */
+  box-shadow: var(--glow); /* soft glow around */
+}
+
+.links { /* row of profile links */
+  display: flex; /* horizontal layout */
+  gap: 14px; /* space between links */
+  justify-content: center; /* center them */
+  margin-top: 0.75rem; /* spacing from badges */
+}
+
+.links a { /* link style */
+  color: var(--fg); /* default text color */
+  text-decoration: none; /* remove underline */
+  border-bottom: 1px dotted var(--border); /* dotted underline for style */
+  transition: color 120ms ease, border-color 120ms ease; /* smooth hover */
+}
+
+.links a:hover { /* link hover state */
+  color: var(--magenta); /* magenta on hover */
+  border-color: var(--magenta); /* match underline */
+}
+
+/* content grid for cards */
+.grid { /* grid wrapper */
+  margin-top: 2rem; /* space below hero */
+  display: grid; /* enable CSS grid */
+  grid-template-columns: 1fr; /* single column on small screens */
+  gap: 1rem; /* space between cards */
+}
+
+@media (min-width: 720px) { /* responsive breakpoint for larger screens */
+  .grid { /* adjust grid on wide screens */
+    grid-template-columns: repeat(2, 1fr); /* two columns */
+  }
+}
+
+/* reusable card component */
+.card { /* card container */
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.05), rgba(255, 59, 212, 0.035)); /* subtle gradient tint */
+  border: 1px solid var(--border); /* border for definition */
+  border-radius: 14px; /* soft rounded corners */
+  padding: 1rem; /* inner padding */
+  box-shadow: var(--glow); /* cyan glow edge */
+}
+
+.card h2 { /* card title */
+  margin: 0 0 0.5rem 0; /* bottom spacing */
+  font-size: 1rem; /* compact heading */
+  font-weight: 600; /* emphasize */
+  color: var(--cyan); /* cyan heading */
+}
+
+.row { /* horizontal row within a card */
+  display: flex; /* align horizontally */
+  align-items: center; /* vertical align center */
+  gap: 12px; /* space between items */
+}
+
+.album { /* square album image */
+  width: 72px; /* fixed width */
+  height: 72px; /* fixed height */
+  border-radius: 10px; /* rounded corners */
+  border: 1px solid var(--border); /* thin border */
+}
+
+.track-title { /* song title */
+  color: var(--fg); /* main color */
+  font-weight: 600; /* emphasize */
+  text-decoration: none; /* remove underline */
+}
+
+.track-artist { /* artist name */
+  color: var(--muted); /* muted tone */
+  margin: 4px 0; /* tiny vertical spacing */
+}
+
+.track-album { /* album name */
+  color: var(--muted); /* muted tone */
+  font-size: 0.85rem; /* smaller text */
+}
+
+.commit-msg { /* commit message line */
+  color: var(--fg); /* readable color */
+  font-weight: 600; /* emphasize */
+  margin: 2px 0; /* tight spacing */
+}
+
+.commit-meta { /* commit metadata line */
+  color: var(--muted); /* muted text */
+  font-size: 0.9rem; /* slightly smaller */
+}
+
+/* thanks people grid */
+.people-grid { /* container for people pills */
+  display: grid; /* grid layout */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* responsive columns */
+  gap: 10px; /* space between items */
+  margin-top: 0.5rem; /* space above grid */
+}
+
+.person { /* individual person pill */
+  display: flex; /* layout name/role horizontally */
+  align-items: center; /* center vertically */
+  justify-content: space-between; /* push role to end */
+  gap: 8px; /* spacing between spans */
+  padding: 8px 10px; /* inner padding */
+  text-decoration: none; /* remove underline */
+  border: 1px dashed var(--border); /* dashed border */
+  border-radius: 10px; /* rounded shape */
+  background: rgba(163,255,18,0.06); /* faint radar-green tint */
+  color: var(--fg); /* text color */
+}
+
+.person:hover { /* hover effect */
+  border-color: var(--lime); /* green border on hover */
+  box-shadow: 0 0 8px rgba(163,255,18,0.25); /* glow on hover */
+}
+
+.person-name { /* name label */
+  font-weight: 600; /* emphasize name */
+}
+
+.person-role { /* role label */
+  color: var(--muted); /* muted color */
+  font-size: 0.85rem; /* slightly smaller */
+}
+
+footer { /* site footer */
+  margin-top: 2.5rem; /* space above */
+  color: var(--muted); /* muted text color */
+  text-align: center; /* center footer text */
+}
+
+/* sticky bottom footer bar with requested label */
+.footer-stick { /* footer element at page bottom */
+  position: fixed; /* stick to viewport */
+  left: 0; /* align to left edge */
+  right: 0; /* align to right edge */
+  bottom: 0; /* stick to bottom edge */
+  padding: 8px 12px; /* inner spacing */
+  background: rgba(11,14,19,0.7); /* translucent background to separate from content */
+  border-top: 1px solid var(--border); /* thin top border */
+  backdrop-filter: blur(6px); /* frosted-glass effect */
+  color: var(--muted); /* text color */
+  text-align: center; /* center text */
+  z-index: 10000; /* ensure above content */
+}
+
+/* link-list styles for writeups/studies */
+.list-item { /* link item container */
+  display: block; /* full width clickable */
+  padding: 10px 12px; /* inner padding */
+  border: 1px solid var(--border); /* border */
+  border-radius: 10px; /* rounded */
+  text-decoration: none; /* no underline */
+  color: var(--fg); /* text color */
+  background: rgba(0,229,255,0.04); /* subtle cyan tint */
+  margin-bottom: 8px; /* space between items */
+}
+
+.list-item:hover { /* hover effect */
+  border-color: var(--cyan); /* cyan border */
+  box-shadow: var(--glow); /* glow */
+}
+
+.list-title { /* item title */
+  font-weight: 600; /* emphasize */
+}
+
+.list-note { /* item note */
+  color: var(--muted); /* muted */
+  font-size: 0.9rem; /* smaller */
+  margin-top: 2px; /* spacing */
+}
+
+.tags { /* tags row */
+  display: flex; /* horizontal */
+  flex-wrap: wrap; /* wrap lines */
+  gap: 6px; /* spacing */
+  margin-top: 6px; /* spacing above */
+}
+
+.tag { /* tag pill */
+  font-size: 0.75rem; /* small */
+  padding: 2px 8px; /* inner padding */
+  border: 1px dashed var(--border); /* dashed outline */
+  border-radius: 999px; /* pill */
+  color: var(--magenta); /* magenta accent */
+  background: rgba(255,59,212,0.08); /* faint magenta */
+}
+
+/* plane animation removed */
+
+/* Inline link row for main nav */
+.link-row { /* inline link row */
+  display: flex; /* horizontal */
+  justify-content: center; /* center */
+  gap: 16px; /* spacing */
+  margin-top: 10px; /* top space */
+}
+
+.link-row a { /* links styling */
+  color: var(--fg); /* color */
+  text-decoration: none; /* no underline */
+  border-bottom: 1px solid transparent; /* custom underline */
+  transition: border-color 120ms ease, color 120ms ease; /* smooth */
+}
+
+.link-row a:hover { /* hover effect */
+  border-color: var(--cyan); /* cyan underline */
+  color: var(--cyan); /* cyan text */
+}
+
+/* Thin gradient rule separator */
+.rule { /* thin gradient rule */
+  height: 1px; /* line height */
+  margin: 20px 0; /* vertical spacing */
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent); /* gradient line */
+  opacity: 0.6; /* soften */
+}
+
+/* Generic vertical section wrapper */
+.section { /* content section */
+  display: flex; /* vertical stack using flex */
+  flex-direction: column; /* column */
+  gap: 10px; /* spacing */
+}
+
+/* Key-value rows for status lines */
+.kv-row { /* key-value row */
+  display: flex; /* horizontal layout */
+  align-items: baseline; /* align text */
+  gap: 12px; /* spacing */
+}
+
+/* Key label in kv rows */
+.kv-key { /* label element */
+  color: var(--muted); /* muted label */
+  min-width: 140px; /* fixed width for alignment */
+}
+
+/* Links inside kv values */
+.kv-value a { /* link inside value */
+  color: var(--fg); /* default link color */
+  text-decoration: none; /* no underline */
+  border-bottom: 1px dotted var(--border); /* dotted bottom border */
+}
+
+.kv-value a:hover { /* hover for value links */
+  border-color: var(--magenta); /* magenta underline */
+  color: var(--magenta); /* magenta color */
+}
+
+/* Compact section heading */
+.section-h2 { /* section heading */
+  font-size: 1rem; /* compact size */
+  color: var(--cyan); /* cyan heading */
+  margin: 0 0 6px 0; /* bottom spacing */
+}
+
+/* vertical bulleted list for thanks section */
+.thanks-list { /* list container */
+  list-style: disc; /* dotted bullets */
+  padding-left: 1.25rem; /* indent bullets */
+  margin: 0.25rem 0 0 0; /* top margin */
+}
+
+.thanks-list li { /* list item */
+  margin: 4px 0; /* vertical spacing */
+}
+
+.thanks-list a { /* links inside list */
+  color: var(--fg); /* link color */
+  text-decoration: none; /* no underline */
+  border-bottom: 1px dotted var(--border); /* dotted underline */
+}
+
+.thanks-list a:hover { /* hover */
+  color: var(--cyan); /* cyan text */
+  border-color: var(--cyan); /* cyan underline */
+}
+
+/* blurb area between commit and thanks */
+.blurb { /* wrapper */
+  margin: 10px 0 4px 0; /* spacing around */
+}
+
+.blurb-text { /* paragraph */
+  color: var(--fg); /* readable text */
+  margin: 0; /* reset margin */
+}
+
+/* ===== Minimal variant (even simpler) ===== */
+.minimal { /* container marker */
+  max-width: 900px; /* width constraint */
+}
+
+.minimal-title { /* big title */
+  font-size: clamp(2.4rem, 8vw, 4.5rem); /* responsive */
+  margin: 0; /* reset margin */
+}
+
+.minimal-sub { /* subtitle */
+  color: var(--muted); /* color */
+  margin: 6px 0 14px 0; /* spacing */
+}
+
+/* flat minimal lists (no boxes) */
+.minimal-list { /* container */
+  display: flex; /* stack vertically */
+  flex-direction: column; /* column */
+  gap: 6px; /* tight spacing */
+}
+
+.minimal-link { /* link row */
+  color: var(--fg); /* text color */
+  text-decoration: none; /* no underline */
+  border-bottom: 1px dotted transparent; /* subtle baseline */
+}
+
+.minimal-link:hover { /* hover state */
+  border-color: var(--cyan); /* cyan underline */
+}
