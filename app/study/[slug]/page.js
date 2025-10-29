@@ -14,8 +14,8 @@ export async function generateStaticParams() { // enumerate slugs for static exp
   return files.map(f => ({ slug: f.slug })); // return params array
 } // end generateStaticParams
 
-export async function generateMetadata({ params }) { // set page metadata (await params per Next 16)
-  const { slug } = await params; // unwrap promise
+export async function generateMetadata({ params }) { // set page metadata
+  const { slug } = params; // plain object
   try { // attempt load
     const { meta } = loadMarkdown("study", slug); // load meta
     return { title: meta.title || slug }; // title from meta
@@ -24,8 +24,8 @@ export async function generateMetadata({ params }) { // set page metadata (await
   } // end try/catch
 } // end generateMetadata
 
-export default async function StudyEntry({ params }) { // default export page (await params)
-  const { slug } = await params; // unwrap promise
+export default async function StudyEntry({ params }) { // default export page
+  const { slug } = params; // plain object
   if (!slug) return notFound(); // missing slug -> 404
   let html = ""; // default html
   let meta = {}; // default meta

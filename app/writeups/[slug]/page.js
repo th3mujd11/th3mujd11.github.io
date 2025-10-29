@@ -16,8 +16,8 @@ export async function generateStaticParams() { // Next.js build-time function
 } // end generateStaticParams
 
 // Optionally set page metadata from front matter
-export async function generateMetadata({ params }) { // Next.js metadata function (await params for Next 16 APIs)
-  const { slug } = await params; // unwrap params promise to get slug
+export async function generateMetadata({ params }) { // Next.js metadata from front matter
+  const { slug } = params; // params is a plain object in App Router
   try { // attempt to read meta
     const { meta } = loadMarkdown("writeups", slug); // load markdown meta
     return { title: meta.title || slug }; // use title if present
@@ -26,8 +26,8 @@ export async function generateMetadata({ params }) { // Next.js metadata functio
   } // end try/catch
 } // end generateMetadata
 
-export default async function WriteupEntry({ params }) { // main page component with slug param (await params)
-  const { slug } = await params; // unwrap params promise
+export default async function WriteupEntry({ params }) { // main page component with slug param
+  const { slug } = params; // read slug directly
   if (!slug) return notFound(); // if slug missing, render 404
   let html = ""; // default html
   let meta = {}; // default meta
