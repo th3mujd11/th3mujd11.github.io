@@ -422,3 +422,41 @@ footer { /* site footer */
 .minimal-link:hover { /* hover state */
   border-color: var(--cyan); /* cyan underline */
 }
+
+/* ===== Mobile-only refinements (do not affect desktop) ===== */
+@media (max-width: 640px) {
+  .main {
+    padding: 2rem 1rem 5rem 1rem; /* slightly tighter side padding, extra bottom for footer */
+  }
+
+  /* Wrap nav links nicely instead of overflowing horizontally */
+  .link-row {
+    flex-wrap: wrap;
+    column-gap: 12px;
+    row-gap: 8px;
+  }
+
+  /* Stack key/value rows for readability on narrow screens */
+  .kv-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .kv-key {
+    min-width: 0; /* allow label to shrink */
+  }
+  .kv-value {
+    word-break: break-word; /* avoid horizontal scrolling with long values */
+  }
+
+  /* Respect iOS safe area for sticky footer */
+  .footer-stick {
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  /* Keep any article images from overflowing the viewport */
+  article img {
+    max-width: 100%;
+    height: auto;
+  }
+}

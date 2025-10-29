@@ -65,7 +65,7 @@ export default function WriteupsPage() { // export default component for /writeu
       </section> {/* end study section */}
 
       <footer> {/* footer */}
-        © 2025 TheMujdii {/* footer text */}
+        © th3mujd11 2025 {/* footer text */}
       </footer> {/* end footer */}
     </main> // end main
   ); // end return

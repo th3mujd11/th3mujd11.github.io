@@ -11,6 +11,13 @@ export const metadata = {
   },
 };
 
+// Ensure proper scaling on mobile devices without affecting desktop
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 // Root layout wrapper for Next.js App Router
 export default function RootLayout({ children }) {
   // Return the base HTML document structure
