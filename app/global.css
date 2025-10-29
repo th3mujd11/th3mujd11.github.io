@@ -110,15 +110,15 @@ body::after { /* overlay pseudo-element */
 }
 
 .links a { /* link style */
-  color: var(--fg); /* default text color */
+  color: var(--lime); /* hacker green */
   text-decoration: none; /* remove underline */
-  border-bottom: 1px dotted var(--border); /* dotted underline for style */
+  border-bottom: 1px dotted var(--lime); /* green dotted underline */
   transition: color 120ms ease, border-color 120ms ease; /* smooth hover */
 }
 
 .links a:hover { /* link hover state */
-  color: var(--magenta); /* magenta on hover */
-  border-color: var(--magenta); /* match underline */
+  color: var(--lime); /* keep green */
+  border-color: var(--lime); /* keep green underline */
 }
 
 /* content grid for cards */
@@ -165,7 +165,7 @@ body::after { /* overlay pseudo-element */
 }
 
 .track-title { /* song title */
-  color: var(--fg); /* main color */
+  color: var(--lime); /* hacker green */
   font-weight: 600; /* emphasize */
   text-decoration: none; /* remove underline */
 }
@@ -209,7 +209,7 @@ body::after { /* overlay pseudo-element */
   border: 1px dashed var(--border); /* dashed border */
   border-radius: 10px; /* rounded shape */
   background: rgba(163,255,18,0.06); /* faint radar-green tint */
-  color: var(--fg); /* text color */
+  color: var(--lime); /* hacker green text */
 }
 
 .person:hover { /* hover effect */
@@ -254,13 +254,13 @@ footer { /* site footer */
   border: 1px solid var(--border); /* border */
   border-radius: 10px; /* rounded */
   text-decoration: none; /* no underline */
-  color: var(--fg); /* text color */
+  color: var(--lime); /* hacker green */
   background: rgba(0,229,255,0.04); /* subtle cyan tint */
   margin-bottom: 8px; /* space between items */
 }
 
 .list-item:hover { /* hover effect */
-  border-color: var(--cyan); /* cyan border */
+  border-color: var(--lime); /* green border */
   box-shadow: var(--glow); /* glow */
 }
 
@@ -301,15 +301,15 @@ footer { /* site footer */
 }
 
 .link-row a { /* links styling */
-  color: var(--fg); /* color */
+  color: var(--lime); /* hacker green */
   text-decoration: none; /* no underline */
   border-bottom: 1px solid transparent; /* custom underline */
   transition: border-color 120ms ease, color 120ms ease; /* smooth */
 }
 
 .link-row a:hover { /* hover effect */
-  border-color: var(--cyan); /* cyan underline */
-  color: var(--cyan); /* cyan text */
+  border-color: var(--lime); /* green underline */
+  color: var(--lime); /* keep green */
 }
 
 /* Thin gradient rule separator */
@@ -342,14 +342,14 @@ footer { /* site footer */
 
 /* Links inside kv values */
 .kv-value a { /* link inside value */
-  color: var(--fg); /* default link color */
+  color: var(--lime); /* hacker green */
   text-decoration: none; /* no underline */
-  border-bottom: 1px dotted var(--border); /* dotted bottom border */
+  border-bottom: 1px dotted var(--lime); /* green dotted bottom border */
 }
 
 .kv-value a:hover { /* hover for value links */
-  border-color: var(--magenta); /* magenta underline */
-  color: var(--magenta); /* magenta color */
+  border-color: var(--lime); /* keep green underline */
+  color: var(--lime); /* keep green */
 }
 
 /* Compact section heading */
@@ -371,14 +371,14 @@ footer { /* site footer */
 }
 
 .thanks-list a { /* links inside list */
-  color: var(--fg); /* link color */
+  color: var(--lime); /* hacker green */
   text-decoration: none; /* no underline */
-  border-bottom: 1px dotted var(--border); /* dotted underline */
+  border-bottom: 1px dotted var(--lime); /* green dotted underline */
 }
 
 .thanks-list a:hover { /* hover */
-  color: var(--cyan); /* cyan text */
-  border-color: var(--cyan); /* cyan underline */
+  color: var(--lime); /* keep green */
+  border-color: var(--lime); /* keep green underline */
 }
 
 /* blurb area between commit and thanks */
@@ -414,13 +414,24 @@ footer { /* site footer */
 }
 
 .minimal-link { /* link row */
-  color: var(--fg); /* text color */
+  color: var(--lime); /* hacker green */
   text-decoration: none; /* no underline */
   border-bottom: 1px dotted transparent; /* subtle baseline */
 }
 
 .minimal-link:hover { /* hover state */
-  border-color: var(--cyan); /* cyan underline */
+  border-color: var(--lime); /* green underline */
+}
+
+/* Markdown content links */
+article a { /* links inside markdown content */
+  color: var(--lime);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--lime);
+}
+article a:hover {
+  color: var(--lime);
+  border-color: var(--lime);
 }
 
 /* ===== Mobile-only refinements (do not affect desktop) ===== */
