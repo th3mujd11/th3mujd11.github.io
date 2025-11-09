@@ -1,12 +1,20 @@
 ---
-title: "AC CTF - retro forum"
+# title: "AC CTF - retro forum"
+
 date: "2025-11-09"
+
 author: "stancium"
+
 platform: "CTFd"
+
 difficulty: "TBD"
+
 category: "web"
+
 tags: []
+
 target: "http://c8ed21db.ctf.ac.upt.ro"
+
 ---
 
 # TL;DR
@@ -16,6 +24,7 @@ The /edit_profile file upload trusts file.filename and writes it directly to dis
 Path traversal lets you overwrite templates (e.g., ../../templates/index.html).
 Overwrite a template with a Jinja payload to read the FLAG from env or from flag.txt.
 Visit / to execute your template and print the flag.
+
 ---
 
 # Recon

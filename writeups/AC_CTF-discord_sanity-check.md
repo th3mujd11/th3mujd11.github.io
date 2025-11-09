@@ -1,12 +1,20 @@
 ---
-title: "AC CTF - discord-sanity-check"
+# title: "AC CTF - discord-sanity-check"
+
 date: "2025-11-09"
+
 author: "someone"
+
 platform: "CTFd"
+
 difficulty: "TBD"
+
 category: "Misc"
+
 tags: [hidden]
+
 target: ""
+
 ---
 
 # TL;DR
@@ -18,4 +26,5 @@ I rememberd that I use vencord as daily driver platform for discord and that is 
 CTF{8413595d715a267be0c69074b2123cd8c138efc73712398092dd0026cf874a7a}
 ````
 
+---
 
