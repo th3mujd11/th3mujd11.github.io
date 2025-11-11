@@ -35,7 +35,7 @@ export default async function StudyEntry({ params }) { // default export page (a
   return ( // render
     <main className="main minimal"> {/* container */}
       <h1 className="minimal-title"> {/* title */}
-        {meta.title || params.slug} {/* displayed title */}
+        {meta.title || slug} {/* displayed title */}
       </h1> {/* end title */}
       {meta.date ? <p className="minimal-sub">{meta.date}</p> : null} {/* optional date */}
 

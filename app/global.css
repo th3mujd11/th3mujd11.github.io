@@ -434,6 +434,72 @@ article a:hover {
   border-color: var(--lime);
 }
 
+/* ========= Markdown article typography ========= */
+article { /* base article styling */
+  line-height: 1.65;
+  color: var(--fg);
+}
+article p {
+  margin: 0.4rem 0 0.9rem 0;
+}
+article h1, article h2, article h3, article h4, article h5, article h6 {
+  margin: 1.2rem 0 0.5rem 0;
+  line-height: 1.25;
+}
+article h2 {
+  color: var(--cyan);
+}
+article ul, article ol {
+  padding-left: 1.25rem;
+  margin: 0.25rem 0 0.9rem 0;
+}
+article li { margin: 0.2rem 0; }
+article code { /* inline code */
+  background: rgba(0,229,255,0.08);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.1rem 0.35rem;
+}
+article pre { /* code block */
+  background: #0a0e13;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  overflow: auto;
+  box-shadow: var(--glow);
+}
+article pre code { border: 0; background: transparent; padding: 0; }
+article blockquote {
+  margin: 0.75rem 0;
+  padding: 0.5rem 0.9rem;
+  border-left: 3px solid var(--cyan);
+  background: rgba(0,229,255,0.06);
+  color: var(--muted);
+}
+article hr {
+  border: 0;
+  height: 1px;
+  margin: 1.2rem 0;
+  background: linear-gradient(90deg, transparent, var(--magenta), transparent);
+  opacity: 0.6;
+}
+article img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0.6rem 0 1rem 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--glow);
+}
+
+/* Group headings on writeups page */
+.group-title {
+  margin: 0.6rem 0 0.2rem 0;
+  color: var(--magenta);
+  font-size: 1.05rem;
+}
+
 /* ===== Mobile-only refinements (do not affect desktop) ===== */
 @media (max-width: 640px) {
   .main {

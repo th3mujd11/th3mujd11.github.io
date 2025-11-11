@@ -1,13 +1,20 @@
 // Server component: lists study markdown notes and PDF files
 // Fully commented for clarity
 
-import { listMarkdown } from "../../lib/md"; // utility to list .md files
+import { listMarkdown, loadMarkdown } from "../../lib/md"; // utilities for notes
 import fs from "fs"; // Node filesystem to list PDFs
 import path from "path"; // Node path to resolve directories
 
 export default function StudyIndex() { // export default route component
-  const notes = listMarkdown("study") // list .md files in /study
+  const noteFiles = listMarkdown("study") // list .md files in /study
     .filter(f => !/^STUDY_TEMPLATE$/i.test(f.slug)); // exclude template
+  const notes = noteFiles.map(n => {
+    let meta = {};
+    try { meta = loadMarkdown("study", n.slug).meta; } catch {}
+    const title = meta.title || n.slug.replace(/[-_]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    const date = meta.date || null;
+    return { ...n, title, date };
+  });
   const pdfDir = path.join(process.cwd(), "public", "study"); // static PDFs go in /public/study
   const pdfs = fs.existsSync(pdfDir) // if directory exists
     ? fs.readdirSync(pdfDir).filter(f => f.toLowerCase().endsWith(".pdf")) // list PDF files
@@ -32,7 +39,8 @@ export default function StudyIndex() { // export default route component
           ) : (
             notes.map(n => (
               <a key={n.slug} href={`/study/${n.slug}`} className="minimal-link"> {/* link to dynamic md page */}
-                <span className="list-title">{n.name}</span> {/* file name */}
+                <span className="list-title">{n.title}</span>
+                {n.date ? <span className="list-note"> — {n.date}</span> : null}
               </a>
             ))
           )}

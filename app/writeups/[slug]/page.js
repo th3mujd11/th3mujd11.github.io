@@ -37,7 +37,7 @@ export default async function WriteupEntry({ params }) { // main page component 
   return ( // render page
     <main className="main minimal"> {/* page container */}
       <h1 className="minimal-title"> {/* heading */}
-        {meta.title || params.slug} {/* show title or slug */}
+        {meta.title || slug} {/* show title or slug */}
       </h1> {/* end title */}
       {meta.date ? <p className="minimal-sub">{meta.date}</p> : null} {/* optional date */}
 
