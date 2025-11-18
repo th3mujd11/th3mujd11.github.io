@@ -46,7 +46,7 @@ export default async function WriteupEntry({ params }) { // main page component 
       <article dangerouslySetInnerHTML={{ __html: html }} /> {/* markdown HTML */}
 
       <footer className="footer-stick"> {/* sticky footer */}
-        C  Th3mujd11 {/* footer text */}
+        © th3mujd11 2025  {/* footer text */}
       </footer> {/* end footer */}
     </main> // end main
   ); // end return
