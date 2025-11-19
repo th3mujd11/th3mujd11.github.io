@@ -8,22 +8,26 @@ export default function WriteupsPage() { // export default component for /writeu
     .filter(f => !/^WRITEUP_TEMPLATE$/i.test(f.slug)); // exclude the template from the index
 
   // Enrich writeups with metadata and a group key based on filename prefix (e.g., AC_CTF)
-  const writeups = writeupFiles.map(f => {
-    let meta = {};
-    try { meta = loadMarkdown("writeups", f.slug).meta; } catch {}
-    const groupRaw = (f.name.split("-")[0] || "Misc");
-    const metaEvent = (meta.event || meta.ctf || "").toString().trim();
-    const event = (metaEvent || groupRaw).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-    const year = (meta.date && String(meta.date).slice(0,4)) || "";
-    const group = `${event}${year ? ` ${year}` : ""}`.trim();
-    const groupSlug = `${event} ${year}`.trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-");
-    const title = meta.title || f.slug.replace(/[-_]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-    const date = meta.date || null;
-    return { ...f, title, date, group, groupSlug, meta };
-  });
+  const writeups = writeupFiles
+    .map(f => {
+      let meta = {};
+      try { meta = loadMarkdown("writeups", f.slug).meta; } catch {}
+      const groupRaw = (f.name.split("-")[0] || "Misc");
+      const metaEvent = (meta.event || meta.ctf || "").toString().trim();
+      const event = (metaEvent || groupRaw).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const year = (meta.date && String(meta.date).slice(0,4)) || "";
+      const group = `${event}${year ? ` ${year}` : ""}`.trim();
+      const groupSlug = `${event} ${year}`.trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-");
+      const title = meta.title || f.slug.replace(/[-_]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const date = meta.date || null;
+      const flag = (meta.hidden ?? meta.unlisted ?? "").toString().toLowerCase();
+      const isHidden = flag === "true" || flag === "1" || flag === "yes";
+      return { ...f, title, date, group, groupSlug, meta, isHidden };
+    })
+    .filter(w => !w.isHidden);
 
   // Group writeups by group label
   const groups = Object.values(writeups.reduce((acc, w) => {
