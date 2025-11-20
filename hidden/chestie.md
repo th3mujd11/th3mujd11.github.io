@@ -9,6 +9,7 @@ tags: [private, notes]
 # This is a hidden page
 
 Drop `.md` files in the `/hidden` folder.
+test actions
 
 - Access at `/hidden/<filename-without-ext>`
 - `title` sets the page title, `date` shows under it
@@ -19,4 +20,3 @@ Example inline code: `echo hello`
 ```
 block code here
 ```
-
