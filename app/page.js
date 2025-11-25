@@ -306,7 +306,7 @@ export default function Home() { // export default React component
       <div className="link-row"> {}
         <a href="https://github.com/th3mujd11" target="_blank" rel="noreferrer">GitHub</a> {/* GitHub */}
         <a href="https://www.linkedin.com/in/andrei-laurentiu-neculai-mirea-38059b28b" target="_blank" rel="noreferrer">LinkedIn</a> {/* Twitter */}
-        <a href="/cv.pdf">CV</a> {}
+        <a href="/public/cv.pdf">CV</a> {}
         <a href="/writeups">Writeups</a> {/* Writeups */}
         <a href="/challenge">Web Challenge</a> {/* link to web CTF challenge */}
         <a href="https://www.last.fm/user/th3mujd11">Last.fm</a> {/* link to web CTF challenge */}
