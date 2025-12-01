@@ -372,13 +372,14 @@ export default function Home() {
           GitHub
         </a>{" "}
         {/* GitHub */}
-        <a
+        {/*<a
           href="https://www.linkedin.com/in/andrei-laurentiu-neculai-mirea-38059b28b"
           target="_blank"
           rel="noreferrer"
         >
           LinkedIn
         </a>{" "}
+        */}
         {/* Twitter */}
         <a href="/public/cv.pdf">CV</a> {}
         <a href="/writeups">Writeups</a> {/* Writeups */}
