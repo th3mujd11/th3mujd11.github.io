@@ -28,6 +28,13 @@ export default function Home() {
   const LASTFM_KEY = "81804a958403ed706961e812b56a1dea"; // Last.fm public API key
   const GITHUB_USER = "th3mujd11"; // GitHub username to inspect public events
   const GITHUB_REPO = "th3mujd11/th3mujd11.github.io"; // fallback repository to query commits from
+  const BADGES = [
+    {
+      title: "TryHackMe",
+      src: "https://tryhackme.com/api/v2/badges/public-profile?userPublicId=274604",
+      minHeight: 190,
+    },
+  ]; // badge embeds to render
 
   // fetch now-playing / last played track from Last.fm
   useEffect(() => {
@@ -534,6 +541,24 @@ export default function Home() {
           {/* person 3 */}
         </ul>{" "}
         {/* end bulleted list */}
+      </section>{" "}
+      <section className="section">
+        {" "}
+        {/* thanks section */}
+        <h2 className="section-h2">Badges:</h2> {/* heading */}
+        <div className="badge-list">
+          {BADGES.map((badge) => (
+            <div className="badge-card" key={badge.title}>
+              <iframe
+                className="badge-frame"
+                src={badge.src}
+                title={badge.title}
+                loading="lazy"
+                style={badge.minHeight ? { minHeight: badge.minHeight } : undefined}
+              />
+            </div>
+          ))}
+        </div>
       </section>{" "}
       {/* end section */}
       <footer className="footer-stick">

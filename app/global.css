@@ -381,6 +381,34 @@ footer { /* site footer */
   border-color: var(--lime); /* keep green underline */
 }
 
+.badge-list { /* vertical badge list without bullets */
+  display: flex; /* flex layout */
+  flex-direction: column; /* stack badges */
+  gap: 14px; /* spacing between cards */
+  padding: 0; /* reset padding */
+  margin: 0; /* reset margin */
+  list-style: none; /* no bullets */
+}
+
+.badge-card { /* badge wrapper */
+  background: var(--card); /* card background */
+  border: 1px solid var(--border); /* subtle border */
+  border-radius: 12px; /* rounded corners */
+  padding: 12px; /* inner spacing */
+  box-shadow: var(--glow); /* glow */
+  display: flex; /* vertical stack */
+  flex-direction: column; /* column layout */
+  gap: 8px; /* spacing */
+}
+
+.badge-frame { /* iframe styling */
+  width: 100%; /* fill card */
+  min-height: 190px; /* ensure visible height */
+  border: none; /* remove default border */
+  border-radius: 8px; /* soften edges */
+  background: var(--bg); /* match background */
+}
+
 /* blurb area between commit and thanks */
 .blurb { /* wrapper */
   margin: 10px 0 4px 0; /* spacing around */
