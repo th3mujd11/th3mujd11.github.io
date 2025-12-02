@@ -4,12 +4,18 @@ import { listMarkdown, loadMarkdown } from "../../lib/md";
 export const metadata = { title: "Hidden Pages" };
 
 export default function HiddenIndex() {
-  const files = listMarkdown("hidden").filter(f => !/^HIDDEN_TEMPLATE$/i.test(f.slug));
+  const files = listMarkdown("hidden").filter(
+    (f) => !/^HIDDEN_TEMPLATE$/i.test(f.slug),
+  );
 
-  const items = files.map(f => {
+  const items = files.map((f) => {
     let meta = {};
-    try { meta = loadMarkdown("hidden", f.slug).meta; } catch {}
-    const title = meta.title || f.slug.replace(/[-_]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    try {
+      meta = loadMarkdown("hidden", f.slug).meta;
+    } catch {}
+    const title =
+      meta.title ||
+      f.slug.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
     const date = meta.date || null;
     return { ...f, title, date, meta };
   });
@@ -23,8 +29,10 @@ export default function HiddenIndex() {
 
   return (
     <main className="main minimal">
-      <h1 className="minimal-title">Hidden Pages</h1>
-      <p className="minimal-sub">Unlisted collection (not linked on home)</p>
+      <h1 className="minimal-title">Pagina unlisted</h1>
+      <p className="minimal-sub">
+        Aici se afla lucruri de care am nevoie dar nu le vreau listate
+      </p>
 
       <div className="rule" />
 
@@ -32,10 +40,14 @@ export default function HiddenIndex() {
         <h2 className="section-h2">All Items</h2>
         <div className="minimal-list">
           {items.length === 0 ? (
-            <div className="list-note">No hidden pages yet. Copy HIDDEN_TEMPLATE.md to /hidden.</div>
+            <div className="list-note">No hidden pages yet.</div>
           ) : (
-            items.map(i => (
-              <a key={i.slug} href={`/hidden/${i.slug}`} className="minimal-link">
+            items.map((i) => (
+              <a
+                key={i.slug}
+                href={`/hidden/${i.slug}`}
+                className="minimal-link"
+              >
                 <span className="list-title">{i.title}</span>
                 {i.date ? <span className="list-note"> — {i.date}</span> : null}
               </a>
@@ -48,4 +60,3 @@ export default function HiddenIndex() {
     </main>
   );
 }
-
