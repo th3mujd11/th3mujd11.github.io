@@ -1,12 +1,10 @@
-import { redirect } from "next/navigation";
-
-export const RICKROLL_URL = "https://www.youjustgot.com/";
+import RickrollPlayer from "./RickrollPlayer";
 
 export const metadata = {
   title: ".env",
-  description: "Redirecting...",
+  description: "ASCII Rickroll easter egg.",
 };
 
-export default function DotEnvRedirect() {
-  redirect(RICKROLL_URL);
+export default function DotEnvPage() {
+  return <RickrollPlayer />;
 }

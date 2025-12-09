@@ -2,22 +2,23 @@
 
 import { useEffect as E, useState as S } from "react";
 
-const R = /<\/?script[^>]*>/gi;
+const X = (c) => String.fromCharCode(c);
+const Y = (s) => [...s].map((v) => X(v.charCodeAt(0))).join("");
+const Z = (p) => new RegExp(p, "gi");
+const R = Z("<\\/?script[^>]*>");
 const U = (h) => h.replace(R, "");
-const C = String.fromCharCode;
-const N = [70, 76, 65, 71].map(C).join("");
-const P = (v) => (v ? [...v].map((x) => C(x.charCodeAt(0))).join("") : "");
+const N = X(70) + X(76) + X(65) + X(71);
 
-export default function X() {
-  const [a, b] = S("Hello, world!");
-  const [c, d] = S("");
+export default function Q() {
+  const [[t, u], [p, l]] = [S("Hello, world!"), S("")];
 
   E(() => {
-    globalThis[N] = P(process.env.NEXT_PUBLIC_FLAG || "");
+    const f = Y(process.env.NEXT_PUBLIC_FLAG || "");
+    globalThis[N] = f;
     return () => delete globalThis[N];
   }, []);
 
-  E(() => d(U(a)), [a]);
+  E(() => l(U(t)), [t]);
 
   return (
     <main className="main minimal">
@@ -31,8 +32,8 @@ export default function X() {
       <section className="section">
         <h2 className="section-h2">Your Bio (HTML allowed)</h2>
         <textarea
-          value={a}
-          onChange={(e) => b(e.target.value)}
+          value={t}
+          onChange={(e) => u(e.target.value)}
           rows={6}
           style={{ width: "100%" }}
           placeholder="Write some HTML..."
@@ -45,7 +46,7 @@ export default function X() {
         <h2 className="section-h2">Preview</h2>
         <div
           style={{ border: "1px dashed var(--border)", padding: "10px", borderRadius: 8 }}
-          dangerouslySetInnerHTML={{ __html: c }}
+          dangerouslySetInnerHTML={{ __html: p }}
         />
       </section>
 
