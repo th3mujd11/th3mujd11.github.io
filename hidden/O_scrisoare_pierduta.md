@@ -28,8 +28,7 @@ Aceest conflict este alimentat de-a lungul piesei printr-o serie de actiuni urma
 Ca in orice comedie, conflictul se sfarseste fericit, toata lumea se impaca la o festivitate condusa de Catavencu, acesta demonstrand ca miza confruntarii a fost superficiala si ca cei lipsiti de caracter pot coexista usor.
 
 ### Scene si secvente
-Ca in orice comedie, conflictul se sfarseste fericit cei implicati impacandu-se si adunandu-se la o festivitate condusa de Catavencu, aceasta impacare demonstrand ca miza confruntarii a fost superficiala si ca cei lipsiti de 
-caracter pot usor sa coexiste.
+Ca in orice comedie, conflictul se sfarseste fericit cei implicati impacandu-se si adunandu-se la o festivitate condusa de Catavencu, aceasta impacare demonstrand ca miza confruntarii a fost superficiala si ca cei lipsiti de caracter pot usor sa coexiste.
 
 
 
