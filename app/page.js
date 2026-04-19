@@ -380,7 +380,7 @@ export default function Home() {
         </a>{" "}
         {/* GitHub */}
         {/*<a
-          href="https://www.linkedin.com/in/andrei-laurentiu-neculai-mirea-38059b28b"
+          href="https://www.linkedin.com/in/th3mujd11"
           target="_blank"
           rel="noreferrer"
         >
