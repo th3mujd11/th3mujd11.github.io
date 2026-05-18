@@ -2,7 +2,7 @@
 import { writeFileSync, mkdirSync } from "fs";
 
 const GITHUB_USER = "th3mujd11";
-const token = process.env.GITHUB_TOKEN;
+const token = process.env.GH_EVENTS_TOKEN;
 
 if (!token) {
   console.warn("GITHUB_TOKEN not set — writing empty events file");
