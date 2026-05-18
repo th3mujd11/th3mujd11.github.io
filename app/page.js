@@ -76,11 +76,13 @@ export default function Home() {
   // fetch all commits from pre-built events JSON (fetched at build time with token)
   useEffect(() => {
     let cancelled = false;
-    async function fetchCommits() {
-      try {
-        const res = await fetch("/github-events.json");
-        if (!res.ok) throw new Error("Failed to load events");
-        const events = await res.json();
+    fetch(`${window.location.origin}/github-events.json`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((events) => {
+        if (cancelled) return;
         const all = [];
         for (const ev of events) {
           if (ev?.type !== "PushEvent" || !ev?.payload?.commits?.length) continue;
@@ -99,14 +101,14 @@ export default function Home() {
             });
           }
         }
-        if (!cancelled) setCommits(all);
-        if (!cancelled) setErrors((e) => ({ ...e, commits: all.length ? null : "No recent commits" }));
-      } catch (err) {
-        console.warn("GitHub events fetch error:", err);
-        if (!cancelled) setErrors((e) => ({ ...e, commits: "Failed to load commits" }));
-      }
-    }
-    fetchCommits();
+        setCommits(all);
+        setErrors((e) => ({ ...e, commits: all.length ? null : "No recent commits" }));
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("GitHub events fetch error:", err);
+        setErrors((e) => ({ ...e, commits: `Error: ${err.message}` }));
+      });
     return () => { cancelled = true; };
   }, []);
 
