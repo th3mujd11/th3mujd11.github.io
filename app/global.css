@@ -528,6 +528,116 @@ article img {
   font-size: 1.05rem;
 }
 
+/* ===== Git Graph ===== */
+.git-graph {
+  display: flex;
+  flex-direction: column;
+}
+
+.git-branch-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0 2px 20px;
+}
+
+.git-branch-label a {
+  color: var(--cyan);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.git-branch-label a:hover {
+  text-decoration: underline;
+}
+
+.git-branch-name {
+  font-size: 0.75rem;
+  color: var(--magenta);
+  padding: 1px 7px;
+  border: 1px dashed var(--magenta);
+  border-radius: 999px;
+  background: rgba(255,59,212,0.08);
+}
+
+.git-node {
+  display: flex;
+  align-items: flex-start;
+  min-height: 28px;
+}
+
+.git-line {
+  position: relative;
+  width: 20px;
+  min-width: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.git-line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--border);
+}
+
+.git-dot {
+  position: relative;
+  z-index: 1;
+  margin-top: 7px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 6px rgba(163,255,18,0.5);
+  flex-shrink: 0;
+}
+
+.git-detail {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 3px 0 3px 8px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.git-sha {
+  color: var(--lime);
+  text-decoration: none;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.git-sha:hover {
+  text-decoration: underline;
+}
+
+.git-msg {
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 420px;
+}
+
+.git-time {
+  color: var(--muted);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* last node hides the trailing line */
+.git-graph > div:last-child .git-line::before {
+  bottom: 50%;
+}
+
 /* ===== Mobile-only refinements (do not affect desktop) ===== */
 @media (max-width: 640px) {
   .main {
@@ -557,6 +667,14 @@ article img {
   /* Respect iOS safe area for sticky footer */
   .footer-stick {
     padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .git-msg {
+    max-width: 200px;
+  }
+
+  .git-detail {
+    font-size: 0.8rem;
   }
 
   /* Keep any article images from overflowing the viewport */

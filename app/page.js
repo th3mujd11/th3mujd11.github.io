@@ -20,8 +20,8 @@ function timeAgo(iso) {
 export default function Home() {
   // export default React component
   const [track, setTrack] = useState(null); // hold last/now playing track info
-  const [commit, setCommit] = useState(null); // hold last GitHub commit info
-  const [errors, setErrors] = useState({ track: null, commit: null }); // capture any fetch errors
+  const [commits, setCommits] = useState([]); // hold parsed git commits
+  const [errors, setErrors] = useState({ track: null, commits: null }); // capture any fetch errors
 
   // configuration constants; change to your own usernames/keys
   const LASTFM_USER = "th3mujd11"; // Last.fm username to query
@@ -73,39 +73,40 @@ export default function Home() {
     }; // cleanup on unmount
   }, []); // empty deps means run once
 
-  // fetch last GitHub commit from pre-built events JSON (fetched at build time with token)
+  // fetch all commits from pre-built events JSON (fetched at build time with token)
   useEffect(() => {
     let cancelled = false;
-    async function fetchCommit() {
+    async function fetchCommits() {
       try {
         const res = await fetch("/github-events.json");
         if (!res.ok) throw new Error("Failed to load events");
         const events = await res.json();
-        const push = events.find(
-          (e) => e?.type === "PushEvent" && e?.payload?.commits?.length,
-        );
-        if (push) {
-          const last = push.payload.commits[push.payload.commits.length - 1];
-          const found = {
-            sha: last?.sha?.slice(0, 7) || "unknown",
-            message: last?.message || "No message",
-            repo: push?.repo?.name || "unknown/unknown",
-            createdAt: push?.created_at || new Date().toISOString(),
-            link: `https://github.com/${push?.repo?.name}/commit/${last?.sha}`,
-          };
-          if (!cancelled) setCommit(found);
-          if (!cancelled) setErrors((e) => ({ ...e, commit: null }));
-        } else {
-          if (!cancelled)
-            setErrors((e) => ({ ...e, commit: "No recent commits found" }));
+        const all = [];
+        for (const ev of events) {
+          if (ev?.type !== "PushEvent" || !ev?.payload?.commits?.length) continue;
+          const repo = ev?.repo?.name || "unknown/unknown";
+          const repoShort = repo.split("/").pop();
+          const branch = (ev?.payload?.ref || "").replace("refs/heads/", "");
+          for (const c of ev.payload.commits) {
+            all.push({
+              sha: (c.sha || "").slice(0, 7),
+              message: (c.message || "No message").split("\n")[0],
+              repo,
+              repoShort,
+              branch,
+              createdAt: ev.created_at || new Date().toISOString(),
+              link: `https://github.com/${repo}/commit/${c.sha}`,
+            });
+          }
         }
+        if (!cancelled) setCommits(all);
+        if (!cancelled) setErrors((e) => ({ ...e, commits: all.length ? null : "No recent commits" }));
       } catch (err) {
         console.warn("GitHub events fetch error:", err);
-        if (!cancelled)
-          setErrors((e) => ({ ...e, commit: "Failed to load commit" }));
+        if (!cancelled) setErrors((e) => ({ ...e, commits: "Failed to load commits" }));
       }
     }
-    fetchCommit();
+    fetchCommits();
     return () => { cancelled = true; };
   }, []);
 
@@ -339,38 +340,44 @@ export default function Home() {
         {}
       </div>{" "}
       {}
-      <div className="kv-row">
-        {" "}
-        {/* last commit row */}
-        <span className="kv-key">Last Commit</span> {}
-        <span className="kv-value">
-          {" "}
-          {}
-          {commit ? (
-            <>
-              <a
-                href={`https://github.com/${commit.repo}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {commit.repo}
-              </a>{" "}
-              {/* repo */}
-              {" — "}
-              <a href={commit.link} target="_blank" rel="noreferrer">
-                {commit.sha}
-              </a>{" "}
-              {/* sha */}
-              {` (${timeAgo(commit.createdAt)})`} {/* time */}
-            </>
-          ) : (
-            (errors.commit ?? "Loading...")
-          )}
-        </span>{" "}
-        {}
-      </div>{" "}
-      {}
-      <div className="rule" /> {/* separator line */}
+      <div className="rule" />
+      <section className="section">
+        <h2 className="section-h2">Git Graph</h2>
+        {commits.length > 0 ? (
+          <div className="git-graph">
+            {commits.map((c, i) => {
+              const showRepo = i === 0 || commits[i - 1].repo !== c.repo || commits[i - 1].branch !== c.branch;
+              return (
+                <div key={`${c.sha}-${i}`}>
+                  {showRepo && (
+                    <div className="git-branch-label">
+                      <a href={`https://github.com/${c.repo}`} target="_blank" rel="noreferrer">
+                        {c.repoShort}
+                      </a>
+                      {c.branch && <span className="git-branch-name">{c.branch}</span>}
+                    </div>
+                  )}
+                  <div className="git-node">
+                    <div className="git-line">
+                      <span className="git-dot" />
+                    </div>
+                    <div className="git-detail">
+                      <a className="git-sha" href={c.link} target="_blank" rel="noreferrer">
+                        {c.sha}
+                      </a>
+                      <span className="git-msg">{c.message}</span>
+                      <span className="git-time">{timeAgo(c.createdAt)}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <span className="kv-value">{errors.commits ?? "Loading..."}</span>
+        )}
+      </section>
+      <div className="rule" />
       <section className="blurb">
         {" "}
         {}
