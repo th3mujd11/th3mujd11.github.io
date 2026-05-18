@@ -26,8 +26,6 @@ export default function Home() {
   // configuration constants; change to your own usernames/keys
   const LASTFM_USER = "th3mujd11"; // Last.fm username to query
   const LASTFM_KEY = "81804a958403ed706961e812b56a1dea"; // Last.fm public API key
-  const GITHUB_USER = "th3mujd11"; // GitHub username to inspect public events
-  const GITHUB_REPO = "th3mujd11/th3mujd11.github.io"; // fallback repository to query commits from
   const BADGES = [
     {
       title: "TryHackMe",
@@ -75,115 +73,41 @@ export default function Home() {
     }; // cleanup on unmount
   }, []); // empty deps means run once
 
-  // fetch last GitHub commit; try public events first, then fall back to most-recent repo commits
+  // fetch last GitHub commit from pre-built events JSON (fetched at build time with token)
   useEffect(() => {
-    // run once on mount
-    let cancelled = false; // flag to guard state updates
+    let cancelled = false;
     async function fetchCommit() {
-      // inner async fetch function
       try {
-        // begin error handling
-        const HEADERS = {
-          headers: {
-            Accept: "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-          },
-        }; // polite headers
-        let found = null; // placeholder for normalized commit
-
-        // 1) Try recent public events for a PushEvent (ignore errors and keep going)
-        try {
-          const url = `https://api.github.com/users/${GITHUB_USER}/events/public`; // events endpoint
-          const res = await fetch(url, HEADERS); // request recent public events
-          if (res.ok) {
-            // proceed only if ok
-            const events = await res.json(); // parse events JSON
-            const push = events.find(
-              (e) => e?.type === "PushEvent" && e?.payload?.commits?.length,
-            ); // first PushEvent with commits
-            if (push) {
-              // if push event exists
-              const first =
-                push.payload.commits[push.payload.commits.length - 1]; // earliest in push
-              const sha = first?.sha?.slice(0, 7) || "unknown"; // short SHA
-              const message = first?.message || "No message"; // commit message
-              const repo = push?.repo?.name || "unknown/unknown"; // repo name
-              const createdAt = push?.created_at || new Date().toISOString(); // timestamp
-              const link = `https://github.com/${repo}/commit/${first?.sha}`; // URL
-              found = { sha, message, repo, createdAt, link }; // normalized
-            }
-          }
-        } catch {
-          /* ignore events errors (e.g., 403 rate limit) */
+        const res = await fetch("/github-events.json");
+        if (!res.ok) throw new Error("Failed to load events");
+        const events = await res.json();
+        const push = events.find(
+          (e) => e?.type === "PushEvent" && e?.payload?.commits?.length,
+        );
+        if (push) {
+          const last = push.payload.commits[push.payload.commits.length - 1];
+          const found = {
+            sha: last?.sha?.slice(0, 7) || "unknown",
+            message: last?.message || "No message",
+            repo: push?.repo?.name || "unknown/unknown",
+            createdAt: push?.created_at || new Date().toISOString(),
+            link: `https://github.com/${push?.repo?.name}/commit/${last?.sha}`,
+          };
+          if (!cancelled) setCommit(found);
+          if (!cancelled) setErrors((e) => ({ ...e, commit: null }));
+        } else {
+          if (!cancelled)
+            setErrors((e) => ({ ...e, commit: "No recent commits found" }));
         }
-
-        // 2) Fallback: direct commit from a known repository
-        if (!found) {
-          try {
-            const commitsRes = await fetch(
-              `https://api.github.com/repos/${GITHUB_REPO}/commits?per_page=1`,
-              HEADERS,
-            ); // latest commit for known repo
-            if (commitsRes.ok) {
-              const commits = await commitsRes.json(); // parse
-              const c0 = commits?.[0]; // latest
-              if (c0) {
-                const sha = (c0?.sha || "").slice(0, 7); // short SHA
-                const message = c0?.commit?.message || "No message"; // message
-                const repo = GITHUB_REPO; // repo identifier
-                const createdAt =
-                  c0?.commit?.author?.date || new Date().toISOString(); // timestamp
-                const link =
-                  c0?.html_url ||
-                  `https://github.com/${repo}/commit/${c0?.sha}`; // link
-                found = { sha, message, repo, createdAt, link }; // normalized
-              }
-            }
-          } catch {
-            /* ignore fallback errors */
-          }
-        }
-
-        if (!cancelled && found) setCommit(found); // update state if mounted
-        try {
-          if (found)
-            localStorage.setItem(
-              "lastCommitCache",
-              JSON.stringify({ at: Date.now(), data: found }),
-            );
-        } catch {} // cache when available
-        if (!cancelled)
-          setErrors((e) => ({
-            ...e,
-            commit: found ? null : "Rate limited — showing cached or nothing",
-          })); // friendly error
       } catch (err) {
-        // handle errors
-        console.warn("GitHub fetch warning:", err); // log as warning to avoid noisy overlays
+        console.warn("GitHub events fetch error:", err);
         if (!cancelled)
-          setErrors((e) => ({ ...e, commit: "Failed to load commit" })); // record error
-      } // end try/catch
-    } // end fetchCommit
-    try {
-      // try to hydrate from cache
-      const raw = localStorage.getItem("lastCommitCache"); // read cache
-      if (raw) {
-        // if present
-        const cached = JSON.parse(raw); // parse JSON
-        if (cached?.data && Date.now() - cached.at < 10 * 60 * 1000) {
-          // valid within 10 minutes
-          setCommit(cached.data); // set cached commit
-          setErrors((e) => ({ ...e, commit: null })); // clear error
-        }
+          setErrors((e) => ({ ...e, commit: "Failed to load commit" }));
       }
-    } catch {} // ignore cache errors
-    fetchCommit(); // run immediately
-    const id = setInterval(fetchCommit, 10 * 60 * 1000); // refresh every 10 minutes to avoid rate-limit
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    }; // cleanup when unmounting
-  }, []); // run once
+    }
+    fetchCommit();
+    return () => { cancelled = true; };
+  }, []);
 
   // animation hook placeholder (previous background animation removed)
   useEffect(() => {

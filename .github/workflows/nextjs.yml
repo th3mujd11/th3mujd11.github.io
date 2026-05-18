@@ -73,6 +73,10 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: Fetch GitHub events
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_EVENTS_TOKEN }}
+        run: node scripts/fetch-github-events.mjs
       - name: Build with Next.js
         env:
             NEXT_PUBLIC_FLAG: ${{ secrets.NEXT_PUBLIC_FLAG }}

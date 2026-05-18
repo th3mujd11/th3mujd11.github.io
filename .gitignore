@@ -33,6 +33,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Generated at build time
+public/github-events.json
+
 # OS files
 .DS_Store
 Thumbs.db
