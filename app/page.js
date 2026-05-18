@@ -101,7 +101,7 @@ export default function Home() {
             });
           }
         }
-        setCommits(all);
+        setCommits(all.slice(0, 4));
         setErrors((e) => ({ ...e, commits: all.length ? null : "No recent commits" }));
       })
       .catch((err) => {
